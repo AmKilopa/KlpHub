@@ -1,10 +1,11 @@
 import React from "react";
-import { useKanban } from "./useKanban";
+import { ToastContainer } from "react-toastify";
+import { useKanban } from "../../hooks/useKanban";
 import KanbanBoard from "./KanbanBoard";
 import Sidebar from "./Sidebar";
-import ModalEditTask from "./ModalEditTask";
 import Loader from "./Loader";
-import { ToastContainer } from "react-toastify";
+import "../../styles/global.css";
+import "../../styles/KanbanPage.css";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function KanbanPage() {
@@ -31,17 +32,6 @@ export default function KanbanPage() {
         <KanbanBoard {...kanban} />
       </div>
       {kanban.isLoading && <Loader />}
-      {kanban.modalOpen && (
-        <ModalEditTask
-          editingId={kanban.editingId}
-          editingText={kanban.editingText}
-          editingDesc={kanban.editingDesc}
-          setEditingText={kanban.setEditingText}
-          setEditingDesc={kanban.setEditingDesc}
-          closeModal={kanban.closeModal}
-          saveEditDesc={kanban.saveEditDesc}
-        />
-      )}
     </div>
   );
 }

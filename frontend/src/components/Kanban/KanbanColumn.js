@@ -1,25 +1,56 @@
-import React, { useState } from "react";
-import KanbanTask from "./KanbanTask";
+import React, { useState } from 'react';
+import KanbanTask from './KanbanTask';
+import '../../styles/KanbanColumn.css';
 
-export default function KanbanColumn({ col, tasks, ...props }) {
-  const [isOver, setIsOver] = useState(false);
+export default function KanbanColumn({
+  title,
+  colKey,
+  tasks,
+  api,
+  selected,
+  toggleSelect,
+  isLoading,
+  draggingTask,
+  dragStartTask,
+  dropTask,
+}) {
+  const [dragOver, setDragOver] = useState(false);
 
-  const handleDragOver = e => { e.preventDefault(); setIsOver(true); };
-  const handleDragLeave = () => setIsOver(false);
-  const handleDrop = e => { e.preventDefault(); setIsOver(false); props.dropTask(col.key); };
+  const handleDragOver = e => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDrop = e => {
+    e.preventDefault();
+    setDragOver(false);
+    dropTask(colKey);
+  };
+
+  const handleDragLeave = () => setDragOver(false);
 
   return (
-    <div className="kanban-column">
-      <h3 className="kanban-column__title">{col.name} ({tasks.length})</h3>
-      <div
-        className={`kanban-column__tasks ${isOver ? "is-over" : ""}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        {tasks.map(task => (
-          <KanbanTask key={task.id} task={task} colKey={col.key} {...props} />
-        ))}
+    <div
+      className={`kanban-column${dragOver ? " drag-over" : ""}`}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragLeave={handleDragLeave}
+    >
+      <div className="kanban-column-title">{title} ({tasks.length})</div>
+      <div className="kanban-column-tasks">
+        {tasks.map(task =>
+          <KanbanTask
+            key={task.id}
+            task={task}
+            colKey={colKey}
+            api={api}
+            selected={selected}
+            toggleSelect={toggleSelect}
+            isLoading={isLoading}
+            draggingTask={draggingTask}
+            dragStartTask={dragStartTask}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../../styles/Sidebar.css";
 
 export default function Sidebar({ addTask }) {
   const [input, setInput] = useState("");
@@ -28,7 +29,7 @@ export default function Sidebar({ addTask }) {
         onChange={e => setDesc(e.target.value)}
         rows={2}
       />
-      <button onClick={submit}>Добавить</button>
+      <button onClick={submit} className="btn-primary">Добавить</button>
     </div>
   );
 }

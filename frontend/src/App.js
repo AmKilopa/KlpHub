@@ -4,7 +4,7 @@ import AccountPanel from "./components/AccountPanel";
 import Dashboard from "./components/Dashboard";
 import KanbanPage from "./components/Kanban/KanbanPage";
 import { getUser, logout as apiLogout, getGithubLoginUrl } from "./api";
-import "./global.css";
+import "./styles/global.css";
 
 const FullPageLoader = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0d1117' }}>

@@ -1,23 +1,60 @@
-import React from "react";
-import KanbanColumn from "./KanbanColumn";
+import React from 'react';
+import KanbanColumn from './KanbanColumn';
+import '../../styles/KanbanBoard.css';
 
-const COLUMNS = [
-  { key: "todo", name: "В планах" },
-  { key: "inprogress", name: "Делается" },
-  { key: "done", name: "Сделано" },
-];
+export default function KanbanBoard({
+  tasks,
+  api,
+  selected,
+  toggleSelect,
+  isLoading,
+  draggingTask,
+  dragStartTask,
+  dropTask,
+}) {
+  // Группируем задачи по columnname, включая 'todo'
+  const plannedTasks = tasks.filter(t => t.columnname === "planned" || t.columnname === "todo");
+  const inProgressTasks = tasks.filter(t => t.columnname === "inProgress");
+  const doneTasks = tasks.filter(t => t.columnname === "done");
 
-export default function KanbanBoard(props) {
   return (
-    <div className="kanban-board" style={{ display: 'flex', gap: '16px' }}>
-      {COLUMNS.map(col => (
-        <KanbanColumn
-          key={col.key}
-          col={col}
-          tasks={props.tasks.filter(t => t.columnname === col.key)}
-          {...props}
-        />
-      ))}
+    <div className="kanban-board-area">
+      <KanbanColumn
+        title="В планах"
+        colKey="planned"
+        tasks={plannedTasks}
+        api={api}
+        selected={selected}
+        toggleSelect={toggleSelect}
+        isLoading={isLoading}
+        draggingTask={draggingTask}
+        dragStartTask={dragStartTask}
+        dropTask={dropTask}
+      />
+      <KanbanColumn
+        title="Делается"
+        colKey="inProgress"
+        tasks={inProgressTasks}
+        api={api}
+        selected={selected}
+        toggleSelect={toggleSelect}
+        isLoading={isLoading}
+        draggingTask={draggingTask}
+        dragStartTask={dragStartTask}
+        dropTask={dropTask}
+      />
+      <KanbanColumn
+        title="Сделано"
+        colKey="done"
+        tasks={doneTasks}
+        api={api}
+        selected={selected}
+        toggleSelect={toggleSelect}
+        isLoading={isLoading}
+        draggingTask={draggingTask}
+        dragStartTask={dragStartTask}
+        dropTask={dropTask}
+      />
     </div>
   );
 }

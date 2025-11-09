@@ -1,4 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import '../../styles/KanbanTask.css';
+
+function MiniLoader() {
+  return (
+    <span className="mini-loader"></span>
+  );
+}
 
 export default function KanbanTask({
   task,
@@ -7,18 +14,19 @@ export default function KanbanTask({
   selected,
   toggleSelect,
   isLoading,
-  // --- НОВОЕ: Получаем D&D пропсы ---
   draggingTask,
   dragStartTask,
 }) {
   const [hoverTitle, setHoverTitle] = useState(false);
   const [hoverDesc, setHoverDesc] = useState(false);
-  const [editMode, setEditMode] = useState(null); // "title" | "desc" | null
+  const [editMode, setEditMode] = useState(null);
   const [localTitle, setLocalTitle] = useState(task.title);
   const [localDesc, setLocalDesc] = useState(task.description || "");
-
   const titleRef = useRef(null);
   const descRef = useRef(null);
+
+  // Для анимации отдельного loader у нового таска
+  const isTaskLoading = !!task.isLoading;
 
   useEffect(() => {
     setLocalTitle(task.title);
@@ -31,12 +39,12 @@ export default function KanbanTask({
   }, [editMode]);
 
   const startEditTitle = () => {
-    if (isLoading) return;
+    if (isLoading || isTaskLoading) return;
     setHoverTitle(false);
     setEditMode("title");
   };
   const startEditDesc = () => {
-    if (isLoading) return;
+    if (isLoading || isTaskLoading) return;
     setHoverDesc(false);
     setEditMode("desc");
   };
@@ -52,7 +60,6 @@ export default function KanbanTask({
   const save = async () => {
     const title = localTitle.trim();
     if (!title) return cancelEdit();
-    // Вызываем функцию из 'api' (теперь она доступна)
     await api.updateTaskContent(task.id, title, localDesc);
     setEditMode(null);
     setHoverTitle(false);
@@ -76,79 +83,77 @@ export default function KanbanTask({
     }
   };
 
-  // --- НОВОЕ: Определяем, эту ли задачу мы тащим ---
   const isDragging = draggingTask === task.id;
 
   return (
     <div
-      draggable={!isLoading && !editMode}
-      // --- НОВОЕ: Добавляем класс 'is-dragging' ---
-      className={`kanban-task ${isLoading ? "loading" : ""} ${
-        colKey === "done" ? "done" : ""
-      } ${isDragging ? "is-dragging" : ""}`}
-      onDragStart={e => !isLoading && !editMode && dragStartTask(e, task.id)}
+      draggable={!isLoading && !isTaskLoading && !editMode}
+      className={`kanban-task${isDragging ? " is-dragging" : ""}${colKey === "done" ? " done" : ""}${(isLoading || isTaskLoading) ? " loading" : ""}`}
+      onDragStart={e => !isLoading && !isTaskLoading && !editMode && dragStartTask(e, task.id)}
     >
-      <div className="kanban-task-header">
-        <input
-          type="checkbox"
-          checked={selected.includes(task.id)}
-          onChange={() => toggleSelect(task.id)}
-          className="kanban-task-checkbox"
-          disabled={isLoading}
-        />
-        <div className="kanban-task-content">
-          {editMode === "title" ? (
-            <input
-              ref={titleRef}
-              className="inline-input"
-              value={localTitle}
-              onChange={e => setLocalTitle(e.target.value)}
-              onKeyDown={onKeyDownTitle}
-              onBlur={save}
-            />
-          ) : (
+      <input
+        type="checkbox"
+        checked={selected.includes(task.id)}
+        onChange={() => toggleSelect(task.id)}
+        className="kanban-task-checkbox"
+        disabled={isLoading || isTaskLoading}
+      />
+      <div className="kanban-task-content">
+        {editMode === "title" ? (
+          <input
+            ref={titleRef}
+            className="inline-input"
+            value={localTitle}
+            onChange={e => setLocalTitle(e.target.value)}
+            onKeyDown={onKeyDownTitle}
+            onBlur={save}
+            disabled={isTaskLoading}
+          />
+        ) : (
+          <span
+            className={`task-title${hoverTitle ? " is-hover" : ""}`}
+            onMouseEnter={() => setHoverTitle(true)}
+            onMouseLeave={() => setHoverTitle(false)}
+            onDoubleClick={startEditTitle}
+            title="Двойной клик — редактировать"
+          >
+            {task.title}
+          </span>
+        )}
+        {editMode === "desc" ? (
+          <textarea
+            ref={descRef}
+            className="inline-textarea"
+            value={localDesc}
+            onChange={e => setLocalDesc(e.target.value)}
+            onKeyDown={onKeyDownDesc}
+            onBlur={save}
+            rows={3}
+            disabled={isTaskLoading}
+          />
+        ) : (
+          task.description && (
             <span
-              className={`task-title ${hoverTitle ? "is-hover" : ""}`}
-              onMouseEnter={() => setHoverTitle(true)}
-              onMouseLeave={() => setHoverTitle(false)}
-              onDoubleClick={startEditTitle}
+              className={`task-desc${hoverDesc ? " is-hover" : ""}`}
+              onMouseEnter={() => setHoverDesc(true)}
+              onMouseLeave={() => setHoverDesc(false)}
+              onDoubleClick={startEditDesc}
               title="Двойной клик — редактировать"
             >
-              {task.title}
+              {task.description}
             </span>
-          )}
-          {editMode === "desc" ? (
-            <textarea
-              ref={descRef}
-              className="inline-textarea"
-              value={localDesc}
-              onChange={e => setLocalDesc(e.target.value)}
-              onKeyDown={onKeyDownDesc}
-              onBlur={save}
-              rows={3}
-            />
-          ) : (
-            task.description && (
-              <span
-                className={`task-desc ${hoverDesc ? "is-hover" : ""}`}
-                onMouseEnter={() => setHoverDesc(true)}
-                onMouseLeave={() => setHoverDesc(false)}
-                onDoubleClick={startEditDesc}
-                title="Двойной клик — редактировать"
-              >
-                {task.description}
-              </span>
-            )
-          )}
-        </div>
-        <button
-          onClick={() => api.deleteTask(task.id)}
-          className="delete-button"
-          aria-label="Удалить"
-        >
-          ✕
-        </button>
+          )
+        )}
       </div>
+      <button
+        onClick={() => api.deleteTask(task.id)}
+        className="delete-button"
+        aria-label="Удалить"
+        disabled={isTaskLoading}
+      >
+        ✕
+      </button>
+      {isTaskLoading && <MiniLoader />}
     </div>
   );
 }
