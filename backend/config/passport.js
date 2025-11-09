@@ -1,13 +1,14 @@
 const GitHubStrategy = require('passport-github2').Strategy;
-const { nanoid } = require('nanoid');
+const nanoid = require('nanoid'); // <-- ИСПРАВЛЕНИЕ ЗДЕСЬ
 
 module.exports = function(passport, supabase) {
+
   passport.use(new GitHubStrategy({
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: `${process.env.BACKEND_URL}${process.env.CALLBACK_PATH}`
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async function(accessToken, refreshToken, profile, done) {
       try {
         let { data: user, error } = await supabase
           .from('users')
@@ -15,10 +16,15 @@ module.exports = function(passport, supabase) {
           .eq('github_id', profile.id)
           .single();
 
-        if (error && error.code !== 'PGRST116') throw error;
-        if (user) return done(null, user);
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
 
-        const newUserId = nanoid(32);
+        if (user) {
+          return done(null, user);
+        }
+
+        const newUserId = nanoid(32); // Теперь эта строка будет работать
         const newUser = {
           id: newUserId,
           github_id: profile.id,
@@ -26,10 +32,16 @@ module.exports = function(passport, supabase) {
           photo: (profile.photos[0] || {}).value
         };
 
-        const { error: insertError } = await supabase.from('users').insert([newUser]);
-        if (insertError) throw insertError;
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert([newUser]);
+
+        if (insertError) {
+          throw insertError;
+        }
         
         return done(null, newUser);
+
       } catch (err) {
         return done(err, null);
       }
@@ -47,6 +59,7 @@ module.exports = function(passport, supabase) {
         .select('*')
         .eq('id', id)
         .single();
+      
       done(error, data);
     } catch (err) {
       done(err, null);

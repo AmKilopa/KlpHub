@@ -15,10 +15,7 @@ const FullPageLoader = () => (
 const LoginPage = () => (
   <div style={{ textAlign: "center", marginTop: 80 }}>
     <h1 style={{ marginBottom: 16 }}>KlpHub</h1>
-    <button
-      onClick={() => (window.location.href = getGithubLoginUrl())}
-      className="btn-github"
-    >
+    <button onClick={() => (window.location.href = getGithubLoginUrl())} className="btn-github">
       Войти через GitHub
     </button>
   </div>
@@ -33,8 +30,7 @@ export default function App() {
       try {
         const res = await getUser();
         setUser(res.data);
-      } catch (error) {
-        console.error("Not authenticated", error);
+      } catch {
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -48,13 +44,8 @@ export default function App() {
     setUser(null);
   };
 
-  if (isLoading) {
-    return <FullPageLoader />;
-  }
-
-  if (!user) {
-    return <LoginPage />;
-  }
+  if (isLoading) return <FullPageLoader />;
+  if (!user) return <LoginPage />;
 
   return (
     <BrowserRouter>

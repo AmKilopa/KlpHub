@@ -1,5 +1,5 @@
 const express = require('express');
-const { nanoid } = require('nanoid');
+const nanoid = require('nanoid'); // <-- ИСПРАВЛЕНИЕ ЗДЕСЬ
 const { isAuthenticated } = require('../middleware/auth');
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get('/todos', async (req, res) => {
 });
 
 router.post('/todos', async (req, res) => {
-  const id = nanoid(8);
+  const id = nanoid(8); // Теперь эта строка будет работать
   const { title, description = "" } = req.body;
   
   const { data, error } = await req.supabase

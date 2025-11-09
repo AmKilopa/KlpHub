@@ -1,17 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 
-// Мы получаем ...props из useKanban
 export default function KanbanTask({
   task,
   colKey,
+  api,
+  selected,
+  toggleSelect,
+  isLoading,
+  // --- НОВОЕ: Получаем D&D пропсы ---
+  draggingTask,
   dragStartTask,
-  //
-  // ИСПРАВЛЕНИЕ: Деструктурируем пропсы с ПРАВИЛЬНЫМИ именами из useKanban
-  //
-  api,           // Вместо 'askDelete' и 'updateTaskTitleDesc'
-  selected,      // Вместо 'isTaskSelected'
-  toggleSelect,  // Вместо 'toggleSelected'
-  isLoading,     // Глобальный isLoading (вместо 'loadingIds')
 }) {
   const [hoverTitle, setHoverTitle] = useState(false);
   const [hoverDesc, setHoverDesc] = useState(false);
@@ -54,9 +52,7 @@ export default function KanbanTask({
   const save = async () => {
     const title = localTitle.trim();
     if (!title) return cancelEdit();
-    //
-    // ИСПРАВЛЕНИЕ: Вызываем функцию из 'api'
-    //
+    // Вызываем функцию из 'api' (теперь она доступна)
     await api.updateTaskContent(task.id, title, localDesc);
     setEditMode(null);
     setHoverTitle(false);
@@ -80,22 +76,22 @@ export default function KanbanTask({
     }
   };
 
+  // --- НОВОЕ: Определяем, эту ли задачу мы тащим ---
+  const isDragging = draggingTask === task.id;
+
   return (
     <div
       draggable={!isLoading && !editMode}
-      className={`kanban-task ${isLoading ? "loading" : ""} ${colKey === "done" ? "done" : ""}`}
-      onDragStart={e => !isLoading && !editMode && dragStartTask && dragStartTask(e, task.id)}
+      // --- НОВОЕ: Добавляем класс 'is-dragging' ---
+      className={`kanban-task ${isLoading ? "loading" : ""} ${
+        colKey === "done" ? "done" : ""
+      } ${isDragging ? "is-dragging" : ""}`}
+      onDragStart={e => !isLoading && !editMode && dragStartTask(e, task.id)}
     >
       <div className="kanban-task-header">
         <input
           type="checkbox"
-          //
-          // ИСПРАВЛЕНИЕ: Проверяем, включен ли id в МАССИВ 'selected'
-          //
           checked={selected.includes(task.id)}
-          //
-          // ИСПРАВЛЕНИЕ: Используем ПРАВИЛЬНОЕ имя функции 'toggleSelect'
-          //
           onChange={() => toggleSelect(task.id)}
           className="kanban-task-checkbox"
           disabled={isLoading}
@@ -116,7 +112,7 @@ export default function KanbanTask({
               onMouseEnter={() => setHoverTitle(true)}
               onMouseLeave={() => setHoverTitle(false)}
               onDoubleClick={startEditTitle}
-              title="Двойной клик — редактировать, Enter/Blur — сохранить"
+              title="Двойной клик — редактировать"
             >
               {task.title}
             </span>
@@ -132,14 +128,13 @@ export default function KanbanTask({
               rows={3}
             />
           ) : (
-            // Отображаем описание, только если оно есть
             task.description && (
               <span
                 className={`task-desc ${hoverDesc ? "is-hover" : ""}`}
                 onMouseEnter={() => setHoverDesc(true)}
                 onMouseLeave={() => setHoverDesc(false)}
                 onDoubleClick={startEditDesc}
-                title="Двойной клик — редактировать, Enter/Blur — сохранить"
+                title="Двойной клик — редактировать"
               >
                 {task.description}
               </span>
@@ -147,9 +142,6 @@ export default function KanbanTask({
           )}
         </div>
         <button
-          //
-          // ИСПРАВЛЕНИЕ: Вызываем функцию из 'api'
-          //
           onClick={() => api.deleteTask(task.id)}
           className="delete-button"
           aria-label="Удалить"
@@ -157,8 +149,6 @@ export default function KanbanTask({
           ✕
         </button>
       </div>
-      {/* Мы используем глобальный isLoading, так как per-task loading не реализован в хуке */}
-      {isLoading && <span className="spinner" />}
     </div>
   );
 }

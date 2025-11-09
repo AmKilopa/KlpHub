@@ -2,9 +2,9 @@ import React from "react";
 import KanbanColumn from "./KanbanColumn";
 
 const COLUMNS = [
-  { key: "todo",       name: "В планах" },
+  { key: "todo", name: "В планах" },
   { key: "inprogress", name: "Делается" },
-  { key: "done",       name: "Сделано" },
+  { key: "done", name: "Сделано" },
 ];
 
 export default function KanbanBoard(props) {
@@ -14,9 +14,6 @@ export default function KanbanBoard(props) {
         <KanbanColumn
           key={col.key}
           col={col}
-          //
-          // ИСПРАВЛЕНИЕ: Было props.todos, стало props.tasks
-          //
           tasks={props.tasks.filter(t => t.columnname === col.key)}
           {...props}
         />

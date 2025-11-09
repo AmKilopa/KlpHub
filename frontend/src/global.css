@@ -385,3 +385,24 @@ button:disabled {
   background-color: var(--color-border-muted);
   color: var(--color-text-default);
 }
+.kanban-column__tasks.is-over {
+  background-color: rgba(88, 166, 255, 0.1);
+  outline: 2px dashed var(--color-accent);
+  outline-offset: -4px;
+  border-radius: var(--rounded-md);
+}
+
+/* Стиль для самой задачи, которую тащат */
+.kanban-task.is-dragging {
+  opacity: 0.4;
+  transform: scale(0.98);
+  box-shadow: 0 5px 15px var(--color-shadow);
+}
+
+/* Меняем курсор при наведении на задачу */
+.kanban-task {
+  cursor: grab; /* Показываем, что можно схватить */
+}
+.kanban-task:active {
+  cursor: grabbing; /* Показываем, что схватили */
+}
