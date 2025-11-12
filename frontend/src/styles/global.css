@@ -1,65 +1,123 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
-
+/* CSS Variables */
 :root {
-  --color-bg-default: #0d1117;
-  --color-bg-inset: #161b22;
-  --color-bg-texture: rgba(255,255,255,0.08);
-  --color-border-default: #30363d;
-  --color-border-muted: #21262d;
-  --color-text-default: #c9d1d9;
-  --color-text-muted: #8b949e;
-  --color-accent: #58a6ff;
+  /* Colors */
+  --color-bg-primary: #0a0e13;
+  --color-bg-secondary: #0f1419;
+  --color-border-default: #1e2a35;
+  --color-text-default: #e1e7ef;
+  --color-text-muted: #8a939f;
+  --color-accent: #539bf5;
+  --color-accent-glow: rgba(83, 155, 245, 0.4);
   --color-danger: #e5534b;
-  --color-success: #238636;
-  --rounded-md: 7px;
-  --rounded-lg: 10px;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+
+  /* Border Radius */
+  --rounded-sm: 4px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-xl: 16px;
+  --rounded-full: 9999px;
 }
-body {
-  background: var(--color-bg-default);
-  color: var(--color-text-default);
-  font-family: 'Rubik', 'Segoe UI', 'Roboto', 'Inter', 'Arial', sans-serif;
-  background-image: radial-gradient(var(--color-bg-texture) 1px, transparent 1px),
-                    radial-gradient(var(--color-bg-texture) 1px, transparent 1px);
-  background-position: 0 0, 10px 10px;
-  background-size: 20px 20px;
+
+* {
   margin: 0;
-  line-height: 1.5;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg-primary);
+  color: var(--color-text-default);
+  position: relative;
+  overflow: hidden;
 }
 
-.Toastify__close-button {
-  color: var(--color-text-muted);
-  font-weight: 700;
-  font-size: 1.3rem;
-  opacity: 0.7;
-  transition: opacity 0.25s ease;
-}
-.Toastify__close-button:hover {
-  color: var(--color-danger);
-  opacity: 1;
+/* УБИРАЕМ body::before - ЭТО ЗЕЛЁНАЯ ПАУЗA! */
+/* body::before больше нет! */
+
+#root {
+  position: relative;
+  z-index: 1;
 }
 
-/* Общие стили для стандартных кнопок */
-button, .btn {
-  font-family: inherit;
-  font-size: 1rem;
-  border-radius: var(--rounded-md);
-  border: none;
-  padding: 10px 18px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.2s, filter 0.16s;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-button.btn-primary {
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 20, 25, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-accent) 0%, #4a90e2 100%);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4a90e2 0%, var(--color-accent) 100%);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+/* Selection */
+::selection {
   background: var(--color-accent);
-  color: #0d1117;
-  box-shadow: 0 1px 8px #0002;
+  color: white;
 }
-button.btn-primary:hover {
-  background: #2562b5;
-  filter: brightness(0.97);
+
+/* Ripple Effect */
+button {
+  position: relative;
+  overflow: hidden;
 }
-button:disabled, .btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: rippleEffect 0.6s cubic-bezier(0, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+/* УБИРАЕМ ВСЕ ОТСТУПЫ В APP */
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Если у тебя есть контейнер вокруг TopBar */
+.app-container,
+.main-container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }

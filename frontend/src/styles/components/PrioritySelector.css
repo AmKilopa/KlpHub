@@ -1,0 +1,95 @@
+.priority-selector {
+  margin-bottom: 12px;
+}
+
+.priority-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-default);
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+
+.priority-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.priority-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 6px;
+  background: rgba(15, 20, 25, 0.6);
+  border: 2px solid var(--color-border-default);
+  border-radius: var(--rounded-md);
+  color: var(--color-text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.priority-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, var(--priority-color) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.priority-option:hover {
+  border-color: var(--priority-color);
+  color: var(--color-text-default);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 20px var(--priority-color);
+}
+
+.priority-option:hover::before {
+  opacity: 0.1;
+}
+
+.priority-option.active {
+  border-color: var(--priority-color);
+  color: var(--color-text-default);
+  background: linear-gradient(145deg, rgba(15, 20, 25, 0.9), rgba(15, 20, 25, 0.7));
+  box-shadow: 
+    0 0 0 1px var(--priority-color),
+    0 0 20px var(--priority-color),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
+}
+
+.priority-option.active::before {
+  opacity: 0.15;
+}
+
+.priority-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px currentColor, inset 0 0 8px rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.priority-name {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 500px) {
+  .priority-options {
+    grid-template-columns: 1fr;
+  }
+}

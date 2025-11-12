@@ -10,10 +10,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start:backend": "cd backend && node server.js",
-    "start:frontend": "cd frontend && npm start",
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm start"
   },
   "keywords": [],
   "author": "",

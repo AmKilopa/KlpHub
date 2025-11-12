@@ -1,9 +1,0 @@
-.kanban-board-area {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  flex-wrap: nowrap;
-  width: 100%;
-  overflow-x: auto;
-  justify-content: flex-start;
-}

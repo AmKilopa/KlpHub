@@ -1,0 +1,77 @@
+.skeleton-layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 60px);
+}
+
+.skeleton-sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton-board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.skeleton-column {
+  background: rgba(15, 20, 25, 0.6);
+  border-radius: var(--rounded-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-title,
+.skeleton-input,
+.skeleton-textarea,
+.skeleton-button,
+.skeleton-column-header,
+.skeleton-task {
+  background: linear-gradient(90deg, rgba(83, 155, 245, 0.1) 0%, rgba(83, 155, 245, 0.2) 50%, rgba(83, 155, 245, 0.1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--rounded-md);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-title {
+  height: 32px;
+  width: 70%;
+}
+
+.skeleton-input {
+  height: 44px;
+}
+
+.skeleton-textarea {
+  height: 100px;
+}
+
+.skeleton-button {
+  height: 44px;
+  margin-top: auto;
+}
+
+.skeleton-column-header {
+  height: 36px;
+  width: 60%;
+}
+
+.skeleton-task {
+  height: 80px;
+}
