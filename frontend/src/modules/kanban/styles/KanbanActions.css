@@ -1,1 +1,52 @@
-/* KanbanActions CSS goes here */
+.kanban-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.kanban-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(145deg, rgba(15, 20, 25, 0.95) 0%, rgba(10, 14, 19, 0.8) 100%);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--rounded-md);
+  color: var(--color-text-default);
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+.kanban-action-btn:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 16px rgba(83, 155, 245, 0.3), 0 0 20px var(--color-accent-glow);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.kanban-action-danger {
+  border-color: rgba(229, 83, 75, 0.5);
+}
+
+.kanban-action-danger:hover {
+  border-color: var(--color-danger);
+  box-shadow: 0 4px 16px rgba(229, 83, 75, 0.4), 0 0 20px rgba(229, 83, 75, 0.3);
+  background: linear-gradient(145deg, rgba(229, 83, 75, 0.15) 0%, rgba(229, 83, 75, 0.08) 100%);
+}
+
+@media (max-width: 768px) {
+  .kanban-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .kanban-action-btn {
+    flex: 1;
+    min-width: fit-content;
+  }
+}
