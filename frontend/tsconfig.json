@@ -4,15 +4,28 @@
     "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "jsx": "react-jsx",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "node", 
+    "strict": true, 
+    "esModuleInterop": true, 
+    "skipLibCheck": true, 
+    "forceConsistentCasingInFileNames": true, 
+    "resolveJsonModule": true, 
+    "isolatedModules": true, 
+    "noEmit": true, 
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
+    "paths": {
+      "@kanban/*": ["modules/kanban/*"],
+      "@todos/*": ["modules/todos/*"],
+      "@dashboard/*": ["modules/dashboard/*"],
+      "@auth/*": ["modules/auth/*"],
+      "@common/*": ["components/common/*"],
+      "@styles/*": ["styles/*"],
+      "@pages/*": ["pages/*"],
+      "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"],
+      "@types/*": ["types/*"]
+    }
   },
   "include": ["src"]
 }
